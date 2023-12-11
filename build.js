@@ -2,23 +2,25 @@ import fs from 'fs';
 import path from 'path';
 import { CRX_OUTDIR,CRX_CONTENT_OUTDIR,CRX_BACKGROUND_OUTDIR } from './globalConfig.js';
 
-// copy the files from the dir
-const copyDirectory = (src, dest) => {
-    if (!fs.existsSync(dest)) {
-        fs.mkdirSync(dest);
+// 拷贝目录文件
+const copyDirectory = (srcDir, destDir) => {
+    // 判断目标目录是否存在，不存在则创建
+    if (!fs.existsSync(destDir)) {
+        fs.mkdirSync(destDir)
     }
-    if (fs.existsSync(src)) {
-        fs.readdirSync(src).forEach((file) => {
-            const curPath = path.join(src, file);
-            if (fs.lstatSync(curPath).isDirectory()) {
-                copyDirectory(curPath, path.join(dest, file));
-            } else {
-                if (fs.existsSync(curPath)) {
-                    fs.copyFileSync(curPath, path.join(dest, file));
-                }
-            }
-        });
-    }
+
+    fs.readdirSync(srcDir).forEach((file) => {
+        const srcPath = path.join(srcDir, file)
+        const destPath = path.join(destDir, file)
+
+        if (fs.lstatSync(srcPath).isDirectory()) {
+            // 递归复制子目录
+            copyDirectory(srcPath, destPath)
+        } else {
+            // 复制文件
+            fs.copyFileSync(srcPath, destPath)
+        }
+    })
 }
 
 // remove the dir

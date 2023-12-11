@@ -1,1 +1,1 @@
-"use strict";
+"use strict";chrome.runtime.onInstalled.addListener(()=>{chrome.action.disable(),chrome.declarativeContent.onPageChanged.removeRules(void 0,()=>{const e=[{conditions:[new chrome.declarativeContent.PageStateMatcher({pageUrl:{hostSuffix:".ylands.ied.com"}})],actions:[new chrome.declarativeContent.ShowPageAction]}];chrome.declarativeContent.onPageChanged.addRules(e)})});
