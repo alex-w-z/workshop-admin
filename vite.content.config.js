@@ -4,32 +4,33 @@ import path from "path";
 import { CRX_CONTENT_OUTDIR } from "./globalConfig";
 
 export default defineConfig({
-  build: {
-    outDir: CRX_CONTENT_OUTDIR,
-    lib: {
-      entry: [path.resolve(__dirname, "./src/content/index.js")],
-      formats: ["cjs"],
-      fileName: () => {
-        return "content.js";
-      },
-    },
-    chunkSizeWarningLimit: 600,
-    rollupOptions: {
-      output: {
-        assetFileNames: (assetInfo) => {
-          return "content.css";
+    build: {
+        outDir: CRX_CONTENT_OUTDIR,
+        lib: {
+            entry: [
+                path.resolve(__dirname, "./src/content/index.js"),
+            ],
+            formats: ["cjs"],
+            fileName: () => {
+                return "content.js";
+            }
         },
-      },
+        rollupOptions: {
+            output: {
+                assetFileNames: (assetInfo) => {
+                    return "content.css";
+                },
+            },
+        },
     },
-  },
-
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "src"),
+    
+    resolve: {
+        alias: {
+            "@": path.resolve(__dirname, "src"),
+        },
     },
-  },
-  define: {
-    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-  },
-  plugins: [vue()],
+    define: {
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    },
+    plugins: [vue()],
 });
