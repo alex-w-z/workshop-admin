@@ -20,13 +20,32 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 });
 
-chrome.tabs.onUpdated.addListener(function (details) {
-    // 获取当前tabId与url
-    const { tabId, url } = details;
-    // 判断页面是否为适配所有域名以“.ylands.ied.com”结尾的网页,如果是，则向content script发送 isTargetPage，data为1， destination为background 的消息，否则发送0
-    if (url && url.endsWith('.ylands.ied.com')) {
-        sendMessage(tabId, 'isTargetPage', 1, 'background');
-    } else {
-        sendMessage(tabId, 'isTargetPage', 0, 'background');
-    }
+chrome.tabs.onActivated.addListener( activeInfo=> {
+
+    // (async()=>{
+    //     const tabUrl = await syncGetnActivatedTabUrl(activeInfo.tabId);
+    //     console.log(tabUrl);
+    //     // 判断 tabUrl 中是否包含 .ylands.ied.com 
+
+    //     if (tabUrl.includes('.ylands.ied.com')) {
+    //         await sendMessage('isTargetPage', {"showDialog":true}, `content-script@${activeInfo.tabId}`);
+    //         console.log('send message to content script',true);
+    //     } else {
+    //         await sendMessage('isTargetPage', {"showDialog":false}, `content-script@${activeInfo.tabId}`);
+    //         console.log('send message to content script',false);
+    //     }
+    // })();
+    
 });
+
+function syncGetnActivatedTabUrl(tabId) {
+    return new Promise((resolve, reject) => {
+        chrome.tabs.get(tabId, (tab) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(tab.url);
+            }
+        });
+    });
+}

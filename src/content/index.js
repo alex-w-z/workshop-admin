@@ -5,10 +5,17 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 import Content from '@/content/content.vue';
 
 
-const crxApp = document.createElement("div");
-crxApp.id = "CRX-containe";
+// 创建id为CRX-container的div
+const crxApp = document.createElement('div')
+crxApp.id = 'CRX-container'
+// 将刚创建的div插入body最后
+document.body.appendChild(crxApp)
 
-document.body.appendChild(crxApp);
-
-const app = createApp(Content);
-app.mount("#CRX-containe");
+// 创建Vue APP
+const app = createApp(Content)
+// 集成Element Plus
+app.use(ElementPlus, {
+    locale: zhCn,
+})
+// 将Vue APP插入刚创建的div
+app.mount('#CRX-container')

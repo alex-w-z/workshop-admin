@@ -8,10 +8,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["*://*.ylands.ied.com/*"],
       "css": ["content.css"],
       "js": ["content.js"],
-      "run_at": "document_end"
+      "run_at": "document_idle"
     }
   ],
   "permissions": ["storage", "declarativeContent","tabs"],

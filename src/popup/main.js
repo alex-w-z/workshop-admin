@@ -9,7 +9,6 @@ import Popup from '@/popup/popup.vue'
 import router from './router'
 
 const app = createApp(Popup);
-app.use(ElementPlus);
 app.use(ElementPlus,{
     locale: zhCn,
 });
