@@ -10,6 +10,7 @@
             :data="creationsList"
             style="width: 100%"
             @selection-change="handleSelectionChange"
+            @select-all="handleSelectAll"
         >
             <el-table-column type="selection" width="55" />
             <el-table-column label="AssertId" property="assertId">
@@ -38,8 +39,18 @@ const props = defineProps(['visible','creationsList'])
 
 const multipleTableRef = ref(null)
 const multipleSelection = ref([])
+const isAllSelected = ref(false)
+
+const handleSelectAll = (selection) => {
+  if (selection.length === 0){
+    isAllSelected.value = false
+  }else{
+    isAllSelected.value = true
+  }
+};
 
 const toggleSelection = (rows) => {
+  console.log(rows);
   if (rows) {
     const selectedRows = []
     // 选中rows 中currentVersion 为 - 的行 
@@ -50,7 +61,25 @@ const toggleSelection = (rows) => {
     })
     if (selectedRows.length > 0) {
       selectedRows.forEach((row) => {
-        multipleTableRef.value.toggleRowSelection(row, undefined)
+        // 如果isAllSelected 为false 则选中
+        if (!isAllSelected.value) {
+          multipleTableRef.value.toggleRowSelection(row, undefined)
+        } else {
+          // 如果isAllSelected 为true，获取rows与selectedRows的非交集 
+          const unSelectedRows = rows.filter((item) => {
+            return !Array.from(selectedRows.includes(item))
+          })
+          console.log(unSelectedRows);
+          if(unSelectedRows.length > 0){
+            // 取消选中
+            multipleTableRef.value.toggleRowSelection(unSelectedRows, undefined)
+            isAllSelected.value = false
+          }
+          
+
+          
+        } 
+        // multipleTableRef.value.toggleRowSelection(row, undefined)
       })
     } else {
       multipleTableRef.value.clearSelection()
