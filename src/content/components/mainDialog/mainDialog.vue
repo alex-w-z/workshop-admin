@@ -1,9 +1,9 @@
 <template>
   <el-dialog v-model="isVisible" v-if="isVisible" width="70%">
-    <!-- <div>
-      <el-button @click="resetDateFilter">reset date filter</el-button>
+    <div>
+      <!-- <el-button @click="resetDateFilter">reset date filter</el-button> -->
       <el-button @click="clearFilter">reset all filters</el-button>
-    </div> -->
+    </div>
     <el-table ref="multipleTableRef" row-key="assertId" :data="creationsList"  style="width: 100%"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" />
@@ -84,6 +84,10 @@ const toggleSelection = (rows) => {
   } else {
     multipleTableRef.value.clearSelection()
   }
+}
+
+const resetDateFilter = () => {
+  multipleTableRef.value?.clearFilter(['date'])
 }
 
 const clearFilter = () => {
