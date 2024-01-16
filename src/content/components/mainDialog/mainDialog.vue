@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <el-dialog v-model="isVisible" v-if="isVisible" width="70%">
     <!-- <div>
       <el-button @click="resetDateFilter">reset date filter</el-button>
@@ -15,41 +14,12 @@
         :filter-method="filterBlocked" ></el-table-column>
       <el-table-column prop="currentVersion" label="CurrentVersion" />
       <el-table-column prop="featured" label="Featured" />
-      <el-table-column prop="hidden" label="Hidden" />
+      <el-table-column prop="hidden" label="Hidden"
+        :filters="[{ text: 'true', value: true }, { text: 'false', value: false }]"
+        :filter-method="filterHidden" ></el-table-column>
       <el-table-column prop="lastVersion" label="LastVersion" show-overflow-tooltip />
     </el-table>
   </el-dialog>
-=======
-    <el-dialog
-        v-model="isVisible"
-        v-if="isVisible"
-        title="Content"
-        width="60%"
-    >
-        <el-table
-            ref="multipleTableRef"
-            :data="creationsList"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-            @select-all="handleSelectAll"
-        >
-            <el-table-column type="selection" width="55" />
-            <el-table-column label="AssertId" property="assertId">
-            <!-- <template #default="scope">{{ scope.row.date }}</template> -->
-            </el-table-column>
-            <el-table-column property="assertName" label="AssertName" />
-            <el-table-column property="isBlocked" label="IsBlocked"/>
-            <el-table-column property="currentVersion" label="CurrentVersion" />
-            <el-table-column property="lastVersion" label="LastVersion" show-overflow-tooltip />
-        </el-table>
-        <div style="margin-top: 20px">
-            <el-button @click="toggleSelection(creationsList)"
-            >选中所有没有发布的作品</el-button
-            >
-            <el-button @click="toggleSelection()">清除选中</el-button>
-        </div>
-    </el-dialog>
->>>>>>> 6a6975cbc66d091a5929bb457e393177a37b1658
 </template>
 
 <script setup>
@@ -67,26 +37,12 @@ const props = defineProps({
     default: () => []
   }
 
-<<<<<<< HEAD
 })
 
 
 
 const multipleTableRef = ref(null);
 const multipleSelection = ref([]);
-=======
-const multipleTableRef = ref(null)
-const multipleSelection = ref([])
-const isAllSelected = ref(false)
-
-const handleSelectAll = (selection) => {
-  if (selection.length === 0){
-    isAllSelected.value = false
-  }else{
-    isAllSelected.value = true
-  }
-};
->>>>>>> 6a6975cbc66d091a5929bb457e393177a37b1658
 
 const toggleSelection = (rows) => {
   console.log(rows);
@@ -130,14 +86,28 @@ const toggleSelection = (rows) => {
   }
 }
 
-
+const clearFilter = () => {
+  multipleTableRef.value?.clearFilter();
+}
 const filterBlocked = (value, row) => {
+  multipleTableRef.value.clearSelection();
   return row.isBlocked === value;
 };
+
+const filterHidden = (value, row) => {
+  multipleTableRef.value.clearSelection();
+  console.log('value', value)
+  console.log('row.hidden', row.hidden);
+  return row.hidden === value;
+  
+};
+
+
 
 
 const handleSelectionChange = (val) => {
   multipleSelection.value = val
+  console.log(multipleSelection.value);
 }
 
 
