@@ -38,12 +38,15 @@ const initPageData = () => {
                         const assertId = row.querySelector('td:nth-child(1)').innerText;
                         const assertName = row.querySelector('td:nth-child(2)').innerText.replace(/\s+/g, '');
                         const isBlocked = row.querySelector('td:nth-child(4)').innerText;
+                        const featured = row.querySelector('td:nth-child(6)').innerText;
+                        // 如果row.querySelector('td:nth-child(7)').innerText 为 no 则hidden为 false，如果为 "border_clear" 则hidden为 true
+                        const hidden = (row.querySelector('td:nth-child(7)').innerText === 'no' ? false : true);
                         const currentVersion = row.querySelector('td:nth-child(9)').innerText;
                         const lastVersion = row.querySelector('td:nth-child(10)').innerText;
                         
-
+                        
                         //将id,name,isBlocked,currentVersion,lastVersion 装入 {id,name,isBlocked,currentVersion,lastVersion} 对象中，然后将该对象装入creationsList数组中 
-                        creationsList.value.push({assertId:assertId,assertName:assertName,isBlocked:isBlocked,currentVersion:currentVersion,lastVersion:lastVersion});
+                        creationsList.value.push({assertId:assertId,assertName:assertName,isBlocked:isBlocked,featured:featured,hidden:hidden,currentVersion:currentVersion,lastVersion:lastVersion});
                     });
                 }
             }
@@ -82,7 +85,7 @@ onMounted(() => {
 .CRX-content
     .content-entry
         position: fixed
-        z-index: 9999
+        z-index: 1000
         bottom: 100px
         right: 20px
         width: 50px
@@ -90,4 +93,7 @@ onMounted(() => {
         background: url('images/content-icon.png')
         background-size: 100% 100%
         cursor: pointer
+.CRX-el-popper
+    .CRX-el-table-filter
+        z-index :9000
 </style>
