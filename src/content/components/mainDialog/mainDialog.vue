@@ -1,8 +1,8 @@
 <template>
   <el-dialog v-model="isVisible" v-if="isVisible" width="70%">
     <div>
-      <!-- <el-button @click="resetDateFilter">reset date filter</el-button> -->
       <el-button @click="clearFilter">reset all filters</el-button>
+      <el-button :disabled="multipleSelection.length <= 0" @click="approveSelected">approveTheSelected</el-button>
     </div>
     <el-table ref="multipleTableRef" row-key="assertId" :data="creationsList"  style="width: 100%"
       @selection-change="handleSelectionChange">
@@ -24,6 +24,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { apiReqs } from '@/api';
 // 接受父组件传递的方法
 const emit = defineEmits(['onClose'])
 // 接收父组件传递的参数
@@ -114,6 +115,25 @@ const handleSelectionChange = (val) => {
   console.log(multipleSelection.value);
 }
 
+const approveSelected = () => {
+  console.log(multipleSelection.value);
+  let selectedRows = multipleSelection.value
+  if (selectedRows.length > 0) {
+    selectedRows.forEach((row) => {
+      apiReqs.approveCreationByBackground({
+        data: {
+          text: row.assertId,
+        },
+        success: (res) => {
+          console.log(res);
+        },
+        fail: (err) => {
+          console.log(err);
+        }
+      });
+    })
+  }
+}
 
 
 // 是否显示弹窗
@@ -127,4 +147,7 @@ const isVisible = computed({
 })
 </script>
 
-<style scoped lang="stylus"></style>
+<style scoped lang="stylus">
+.CRX-el-table
+  margin-top: 10px;
+</style>

@@ -1,9 +1,16 @@
 <template>
     <div class="P-home">
         <h1>Home Page</h1>
+        <el-button @click="openCreationsUrl">登录</el-button>
     </div>
 </template>
-<script setup></script>
+<script setup>
+
+const openCreationsUrl = () => {
+    chrome.tabs.create({ url: 'http://qa2.ylands.ied.com/workshop-admin/creations/' });
+}
+
+</script>
 
 <style scoped lang="stylus">
 .P-home

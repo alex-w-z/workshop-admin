@@ -2,21 +2,25 @@
 <template>
     <div class="P-login">
         <img src="./logo.png" class="logo" />
-        <div class="ipt-con">
-            <el-input v-model="account" placeholder="账号" />
-        </div>
-        <div class="ipt-con">
-            <el-input v-model="password" type="password" placeholder="请输入账号" show-password />
-        </div>
-        <div class="ipt-con">
-            <el-select v-model="serve_name" placeholder="请选择服务器">
-                <el-option label="测试服" value="test" />
-                <el-option label="正式服" value="prod" />
-            </el-select>
-        </div>
-        <div class="ipt-con">
-            <el-button style="width: 100%" @click="onLogin">登录</el-button>
-        </div>
+        <div class="P-form">
+        <el-form :model="form" :rules="rules">
+            <el-form-item label="账号" prop="username">
+                <el-input v-model="form.username"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+                <el-input v-model="form.password"  type="password" show-password></el-input>
+            </el-form-item>
+            <el-form-item label="请选择服务器" prop="serve_name">
+                <el-select v-model="form.serve_name">
+                    <el-option label="测试服" value="qa2" />
+                    <el-option label="正式服" value="zsf" />
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button style="width: 100%" @click="onLogin">登录</el-button>
+            </el-form-item>
+        </el-form>
+        </div>  
     </div>
     
 </template>
@@ -25,13 +29,42 @@
 <script setup>
 import { ref } from 'vue';
 import {useRouter} from 'vue-router';
-const account = ref('');
-const password = ref('');
-const serve_name = ref('');
+import { apiReqs } from '@/api';
+
+const form = ref({
+    username: '',
+    password: '',
+    serve_name: '',
+    rememberMe: false
+});
+
+const rules = ref({
+    username: [
+        { required: true, message: 'Cannot be empty', trigger: 'blur' },
+    ],
+    password: [
+        { required: true, message: 'Cannot be empty', trigger: 'blur' },
+    ],
+    serve_name: [
+        { required: true, message: 'Cannot be empty', trigger: 'blur' }
+    ]
+});
 
 const router = useRouter();
 const onLogin = () => {
-    router.push('/home');
+    
+    apiReqs.signIn({
+        data: form,
+        success: (res) => {
+            console.log(res);
+            
+            router.push('/home');
+            
+        },
+        error: (err) => {
+            alert(err);
+        }
+    });
 }
 </script>
 
@@ -45,8 +78,8 @@ const onLogin = () => {
     .logo
         display: block
         margin: 50px auto 20px
-    .ipt-con
-        margin: 0 auto 20px
-        width: 300px
+    .P-form
+        margin: 50px auto 20px
+        width: 90%
         text-align: center
 </style>
